@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building Inventory Visualizations</title>
+    <style>
+        /* Add some basic styling to ensure containers have a width */
+        #vis1, #vis2, #vis3 {
+            width: 100%; /* Use 100% of the container width */
+            height: 500px; /* Define a fixed height for the visualizations */
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <h1>Building Inventory Visualizations</h1>
+    <p>This page showcases visualizations of the state building inventory.</p>
+
+    <a href="https://raw.githubusercontent.com/UIUC-iSchool-DataViz/is445_data/main/building_inventory.csv" class="button" target="_blank">The Data</a>
+    <a href="https://github.com/vporwal3/vporwal3.github.io/tree/main/workbook.ipynb" class="button" target="_blank">The Analysis</a>
+    
+    <!-- Refresh Button -->
+    <button id="refreshButton" class="button">Refresh Data</button>
+
+    <h2>Visualization 1: Number of Buildings by Agency</h2>
+    <div id="vis1"></div>
+    <!-- Visualization 1 description -->
+
+    <h2>Visualization 2: Buildings by Congressional and Senate Districts</h2>
+    <div id="vis2"></div>
+    <!-- Visualization 2 description -->
+
+    <h2>Visualization 3: Square Footage of Buildings Over Years by Status</h2>
+    <div id="vis3"></div>
+    <!-- Visualization 3 description -->
+
+    <script>
+        document.getElementById('refreshButton').addEventListener('click', function() {
+            // Trigger the execution of the Python script here
+            fetch('refresh_data.py')
+                .then(response => response.text())
+                .then(data => console.log(data))
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Embed Visualization 1
+        fetch('chart1.json')
+            .then(response => response.json())
+            .then(spec => vegaEmbed('#vis1', spec, { "actions": false }));
+
+        // Embed Visualization 2
+        fetch('chart2.json')
+            .then(response => response.json())
+            .then(spec => vegaEmbed('#vis2', spec, { "actions": false }));
+
+        // Embed Visualization 3
+        fetch('chart3.json')
+            .then(response => response.json())
+            .then(spec => vegaEmbed('#vis3', spec, { "actions": false }));
+    </script>
+</body>
+</html>
