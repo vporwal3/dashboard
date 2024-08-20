@@ -37,7 +37,7 @@ loan_status_distribution = alt.Chart(df).mark_arc().encode(
 
 #loan_status_distribution.properties(width='container')
 
-combined_chart = alt.hconcat(chart1, loan_status_distribution)  # Combine charts horizontally
+combined_chart = alt.hconcat(chart1, loan_status_distribution,spacing=100)  # Combine charts horizontally
 
 # Display or save the combined chart
 combined_chart.save('chart1.json')  # Saving to JSON file
