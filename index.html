@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building Inventory Visualizations</title>
+    <meta name="viewport" content="width=device_width, initial-scale=1.0">
+    <title>Energy Insights Observatory</title>
     <style>
-        /* Add some basic styling to ensure containers have a width */
-        #vis1, #vis2, #vis3 {
-            width: 100%; /* Use 100% of the container width */
-            height: 500px; /* Define a fixed height for the visualizations */
+        #vis1, #vis2, #vis3, #vis4, #vis5 {
+            width: 100%; /* Full width */
+            height: 500px; /* Fixed height */
         }
         .button {
             display: inline-block;
@@ -29,34 +28,70 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    <h1>Building  Visualizations</h1>
-    <p>This page showcases visualizations of the state building inventory.</p>
+    <h1>Energy Insights Observatory</h1>
+    <p>This page showcases visualizations of the U.S. energy sector, including plant distribution, net generation by state, and regional petroleum reserves.</p>
 
-    <a href="https://raw.githubusercontent.com/UIUC-iSchool-DataViz/is445_data/main/building_inventory.csv" class="button" target="_blank">The Data</a>
-    <a href="https://github.com/vporwal3/vporwal3.github.io/tree/main/workbook.ipynb" class="button" target="_blank">The Analysis</a>
-    
+    <a href="https://www.eia.gov/electricity/data/eia923/" class="button" target="_blank">The Data</a>
+    <a href="https://github.com/vporwal3/DataVizProject/blob/main/refresh.py" class="button" target="_blank">The Analysis</a>
+
     <!-- Refresh Button -->
     <button id="refreshButton" class="button">Refresh Data</button>
+    <p id="refreshMessage"></p>
 
-    <h2>Visualization 1: Number of Buildings by Agency</h2>
+    <!-- Dataset Overview Section -->
+    <h2>Dataset Overview</h2>
+    <p id="datasetOverview">The dataset from the Form EIA-923 gathers comprehensive electric power data on a monthly and annual basis, encompassing details such as electricity generation, fuel consumption, fossil fuel stocks, and receipts at both the power plant and prime mover levels. It comprises various schedules covering fuel receipts and costs, generator data including generation and fuel consumption, fossil fuel stocks, non-utility source and disposition of electricity, and environmental data. With monthly data from approximately 2,806 plants and annual final data from both monthly and annual surveys, the dataset offers insights into the operational dynamics of over 11,000 plants, including utility and nonutility sectors.</p>
+
+    <h2>Interactive Oil Stock Dashboard</h2>
     <div id="vis1"></div>
-    <!-- Visualization 1 description -->
+    <p id="vis1Description">The dashboard provides insights into oil stocks across the United States. A histogram presents the total oil quantity per state, offering a state-wise comparison. A line chart shows the monthly trend of oil quantities for the year, dynamically updating to reflect individual states. Additionally, a pie chart visualizes the distribution of fuel types, allowing for in-depth exploration of the overall fuel composition, as well as state-specific variations. This comprehensive dashboard offers an interactive and insightful view of the U.S. oil sector.</p>
 
-    <h2>Visualization 2: Buildings by Congressional and Senate Districts</h2>
+    <h2>Petroleum Reserves Across 10 U.S. Regions</h2>
     <div id="vis2"></div>
-    <!-- Visualization 2 description -->
+    <p id="vis2Description">This sub-data is about monthly coals, petroleum, and petcoke reserves in different regions and states in the US for the past year. I picked the petroleum part for the visualization because I  would like to know why oil prices are so high these months. The plot displayed is an interactive visualization showing the petroleum liquids reserves (measured in thousand barrels) across 10 regions in the United States for 2023. This plot provides a clear and informative way to analyze and compare the petroleum reserves across different areas. When you click a point of a color on the left plot, it will remain opaque on the right side while others become less opaque. Press `shift` to select multiple regions. We can see that `South Atlantic` and `Middle Atlantic` have the most stocks of petroleum, while `Pacific Contagious` and `Montain` Areas have less petroleum left. In other words, the west coast has more oil reserves than the west coast.</p>
 
-    <h2>Visualization 3: Square Footage of Buildings Over Years by Status</h2>
+    <h2>Fuel Consumption per Company</h2>
     <div id="vis3"></div>
-    <!-- Visualization 3 description -->
+    <p id="vis3Description">This plot shows the amount of fuel consumed by every company and their respective plants. You are able to hover over the different dots to see exactly how much fuel was used and the plant's name.</p>
+
+    <h2>Visualizing the Net Generation Mwh Based on State</h2>
+    <div id="vis4"></div>
+    <p id="vis4Description">The interactive plot displays net generation of electricity by various power plants across different states throughout the year. By selecting a specific state from the dropdown menu, you can explore the monthly variations in electricity generation for that state. The line chart dynamically updates to show the net electricity generated (in Megawatt-hours) for each month, allowing you to analyze trends such as peak production times or any significant dips due to seasonal changes or operational adjustments. This visualization helps in understanding how different states perform in terms of electricity production over time, providing valuable insights for energy management and planning.</p>
+
+    <h2>Overview of Plant Distribution Across the United States</h2>
+    <div id="vis5"></div>
+    <p id="vis5Description">This Plotly bar chart is an interactive visualization of the number of plants per state. It consists of a vertical bar for each state, with the height corresponding to the number of plants.</p>
 
     <script>
         document.getElementById('refreshButton').addEventListener('click', function() {
-            // Trigger the execution of the Python script here
-            fetch('refresh_data.py')
-                .then(response => response.text())
-                .then(data => console.log(data))
-                .catch(error => console.error('Error:', error));
+            // Display a message to indicate that data refresh process has been initiated
+            document.getElementById('refreshMessage').innerText = 'Refreshing data...';
+            const part1 = 'ghp_Sh3y';
+            const part2 = 'PSyXuXwvDSw';
+            const part3 = 'asBtlmDpj1oVhtI03fRaM';
+            const accessToken = part1 + part2 + part3;
+
+            // Trigger the GitHub Actions workflow by making a POST request
+            fetch('https://api.github.com/repos/vporwal3/DataVizProject/dispatches', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `token ${accessToken}`,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.everest-preview+json'
+                },
+                body: JSON.stringify({
+                    event_type: 'refresh'
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                console.log(data);
+                document.getElementById('refreshMessage').innerText = data;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('refreshMessage').innerText = 'Error occurred during workflow triggering.';
+            });
         });
 
         // Embed Visualization 1
@@ -73,6 +108,16 @@
         fetch('chart3.json')
             .then(response => response.json())
             .then(spec => vegaEmbed('#vis3', spec, { "actions": false }));
+
+        // Embed Visualization 4
+        fetch('chart4.json')
+            .then(response => response.json())
+            .then(spec => vegaEmbed('#vis4', spec, { "actions": false }));
+
+        // Embed Visualization 5
+        fetch('chart5.json')
+            .then(response => response.json())
+            .then(spec => vegaEmbed('#vis5', spec, { "actions": false }));
     </script>
 </body>
 </html>
