@@ -19,7 +19,7 @@ chart1 = alt.Chart(state_defaults).mark_bar().encode(
     title="State vs Loan Default Rate"
 ).add_selection(brush)
 
-chart1.properties(width='container')
+#chart1.properties(width='container')
 
 
 # Second Plot: Pie Chart of Loan Status
@@ -33,15 +33,21 @@ loan_status_distribution = alt.Chart(df).mark_arc().encode(
     title="Loan Status Distribution"
 )
 
-loan_status_distribution.properties(width='container')
 
 
-# If earlier charts are defined, combine all charts into a dashboard
-dashboard = chart1 | loan_status_distribution 
+#loan_status_distribution.properties(width='container')
 
-# Display or save the dashboard
-dashboard.save("chart1.json")
-dashboard.save("chart1.html")
+combined_chart = alt.hconcat(chart1, loan_status_distribution)  # Combine charts horizontally
+
+# Display or save the combined chart
+combined_chart.save('chart1.json')  # Saving to JSON file
+
+# # If earlier charts are defined, combine all charts into a dashboard
+# dashboard = chart1 | loan_status_distribution 
+
+# # Display or save the dashboard
+# dashboard.save("chart1.json")
+# dashboard.save("chart1.html")
 
 
 
@@ -79,3 +85,4 @@ line_chart.properties(width='container')
 
 # Display or save the chart
 line_chart.save('chart2.json')  # Saving to HTML file
+
