@@ -19,6 +19,9 @@ chart1 = alt.Chart(state_defaults).mark_bar().encode(
     title="State vs Loan Default Rate"
 ).add_selection(brush)
 
+chart1.properties(width='container')
+
+
 # Second Plot: Pie Chart of Loan Status
 loan_status_distribution = alt.Chart(df).mark_arc().encode(
     theta=alt.Theta('count()', title='Number of Loans'),
@@ -30,12 +33,15 @@ loan_status_distribution = alt.Chart(df).mark_arc().encode(
     title="Loan Status Distribution"
 )
 
+loan_status_distribution.properties(width='container')
+
 
 # If earlier charts are defined, combine all charts into a dashboard
-dashboard = chart1 & loan_status_distribution 
+dashboard = chart1 | loan_status_distribution 
 
 # Display or save the dashboard
-dashboard.save('chart1.json')
+dashboard.save("chart1.json")
+dashboard.save("chart1.html")
 
 
 
@@ -68,6 +74,8 @@ line_chart = alt.Chart(avg_delinquency_rate).mark_line(point=True).encode(
     width=600,
     height=400
 ).add_params(selection)
+
+line_chart.properties(width='container')
 
 # Display or save the chart
 line_chart.save('chart2.json')  # Saving to HTML file
