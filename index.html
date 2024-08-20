@@ -72,7 +72,7 @@
             const accessToken = part1 + part2 + part3;
 
             // Trigger the GitHub Actions workflow by making a POST request
-            fetch('https://api.github.com/repos/vporwal3/DataVizProject/dispatches', {
+            fetch('https://api.github.com/repos/vporwal3/dashboard/dispatches', {
                 method: 'POST',
                 headers: {
                     'Authorization': `token ${accessToken}`,
