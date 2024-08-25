@@ -17,7 +17,7 @@
             color: white;
             text-decoration: none;
             border-radius: 5px;
-            font-size: 16px;
+            font-size: 20px;
         }
         .button:hover {
             background-color: #0056b3;
@@ -28,8 +28,8 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
 </head>
 <body>
-    <h1>https://vporwal3.github.io/dashboard/</h1>
-    <p>This dashboard provides a comprehensive analysis of loan performance metrics from January 2015 to September 2016, assessing risk through default rates, FICO scores, and debt-to-income ratios across the United States.</p>
+    <h1>Loan Default Analysis Dashboard</h1>
+    <p>This dashboard provides a comprehensive analysis of loan performance metrics from January 2015 to September 2016, assessing risk through KPI's like Default Rates, Delinquency Rate, and Debt-to-Income ratios across the United States.</p>
 
     <a href="https://www.eia.gov/electricity/data/eia923/" class="button" target="_blank">The Data</a>
     <a href="https://github.com/vporwal3/DataVizProject/blob/main/refresh.py" class="button" target="_blank">The Analysis</a>
@@ -40,17 +40,17 @@
 
     <!-- Dataset Overview Section -->
     <h2>Dataset Overview</h2>
-    <p id="datasetOverview">This dataset comprises 80,000 observations detailing various aspects of loans issued between January 2015 and September 2016. Key features include loan amounts, terms, FICO scores, employment length, and default statuses, providing a rich dataset for analyzing credit risk and borrower financial health.</p>
+    <p id="datasetOverview">This dataset comprises 80,000 observations detailing various aspects of loans issued between January 2015 and September 2016. Key features include loan amounts, installment amounts, FICO scores, states and default statuses, providing a rich dataset for analyzing credit risk and borrower financial health.</p>
 
-    <h2>Interactive Oil Stock Dashboard</h2>
+    <h2>Default Rate Analysis</h2>
     <div id="vis1"></div>
     <p id="vis1Description">This visualization shows the average loan default rates across different states, highlighting areas with higher credit risks. Users can interact with the chart to filter subsequent visualizations based on state selection.</p>
 
-    <h2>Petroleum Reserves Across 10 U.S. Regions</h2>
+    <h2>Delinquency Rate Analysis</h2>
     <div id="vis2"></div>
     <p id="vis2Description">Explore the relationship between borrowers' FICO scores and their delinquency rates. This chart includes a dropdown to select specific loan statuses, allowing for a detailed analysis of how credit scores correlate with payment behaviors.</p>
 
-    <h2>Fuel Consumption per Company</h2>
+    <h2>Debt-to-Income Ratio Analysis</h2>
     <div id="vis3"></div>
     <p id="vis3Description">Analyzing borrowers' debt-to-income (DTI) ratios across different loan statuses and financial metrics such as annual income and loan installments. This comprehensive view helps identify patterns in financial burden relative to borrowers' earnings and loan obligations.</p>
 
