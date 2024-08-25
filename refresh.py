@@ -38,7 +38,7 @@ loan_status_distribution.properties(width='container')
 
 # If earlier charts are defined, combine all charts into a dashboard
 #dashboard = chart1 | loan_status_distribution 
-dashboard = alt.hconcat(chart1, loan_status_distribution , spacing=50)  # Adjust spacing as needed
+dashboard = alt.hconcat(chart1, loan_status_distribution , spacing=100)  # Adjust spacing as needed
 
 # Display or save the dashboard
 dashboard.save("chart1.json")
