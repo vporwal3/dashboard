@@ -19,7 +19,7 @@ chart1 = alt.Chart(state_defaults).mark_bar().encode(
     title="State vs Loan Default Rate"
 ).add_selection(brush)
 
-#chart1.properties(width='container')
+chart1.properties(width='container')
 
 
 # Second Plot: Pie Chart of Loan Status
@@ -33,21 +33,14 @@ loan_status_distribution = alt.Chart(df).mark_arc().encode(
     title="Loan Status Distribution"
 )
 
+loan_status_distribution.properties(width='container')
 
 
-#loan_status_distribution.properties(width='container')
+# If earlier charts are defined, combine all charts into a dashboard
+dashboard = chart1 | loan_status_distribution 
 
-combined_chart = alt.hconcat(chart1, loan_status_distribution,spacing=100)  # Combine charts horizontally
-
-# Display or save the combined chart
-combined_chart.save('chart1.json')  # Saving to JSON file
-
-# # If earlier charts are defined, combine all charts into a dashboard
-# dashboard = chart1 | loan_status_distribution 
-
-# # Display or save the dashboard
-# dashboard.save("chart1.json")
-# dashboard.save("chart1.html")
+# Display or save the dashboard
+dashboard.save("chart1.json")
 
 
 
@@ -85,4 +78,65 @@ line_chart.properties(width='container')
 
 # Display or save the chart
 line_chart.save('chart2.json')  # Saving to HTML file
+
+
+
+alt.data_transformers.disable_max_rows()
+
+df = df[df['dti'] < 100]
+
+# Rounding and capping annual income
+df['rounded_annual_inc'] = df['annual_inc'].apply(lambda x: int(min(max(40000, round(x / 10000) * 10000), 200000)))
+
+# Rounding installment to nearest 100, capping at 1500
+df['rounded_installment'] = df['installment'].apply(lambda x: int(min(round(x / 100) * 100, 1500)))
+
+# 1. Bar Chart for DTI vs Loan Status
+bar_chart = alt.Chart(df).mark_bar().encode(
+    x='loan_status:N',
+    y=alt.Y('mean(dti):Q', scale=alt.Scale(domain=(0, 25))),
+    color='loan_status:N',
+    tooltip=['mean(dti)', 'loan_status']
+).properties(
+    title="Average DTI by Loan Status",
+    width=200
+)
+
+bar_chart.properties(width='container')
+
+
+# 2. Line Plot with Points for DTI vs Rounded Annual Income
+line_plot_income = alt.Chart(df).mark_line(point=True).encode(
+    x=alt.X('rounded_annual_inc:Q', title='Annual Income', scale=alt.Scale(domain=(40000, 200000))),
+    y=alt.Y('mean(dti):Q', scale=alt.Scale(domain=(0, 25))),
+    color='loan_status:N',
+    tooltip=[alt.Tooltip('rounded_annual_inc:Q', title='Annual Income'), 'mean(dti):Q', 'loan_status:N']
+).properties(
+    title="Average DTI vs Annual Income by Loan Status",
+    width=200
+)
+line_plot_income.properties(width='container')
+
+
+df = df[df['rounded_installment']<=1200]
+
+# 3. Line Plot with Points for DTI vs Rounded Installment
+line_plot_installment = alt.Chart(df).mark_line(point=True).encode(
+    x=alt.X('rounded_installment:Q', title='Installment', scale=alt.Scale(domain=(0, 1200))),
+    y=alt.Y('mean(dti):Q', scale=alt.Scale(domain=(0, 25))),
+    color='loan_status:N',
+    tooltip=[alt.Tooltip('rounded_installment:Q', title='Installment'), 'mean(dti):Q', 'loan_status:N']
+).properties(
+    title="Average DTI vs Installment by Loan Status",
+    width=200
+)
+
+line_plot_installment.properties(width='container')
+
+
+# Combine all three charts horizontally
+combined_chart = alt.hconcat(bar_chart, line_plot_income, line_plot_installment, spacing=30)  # Adjust spacing as needed
+
+# Display the combined chart
+combined_chart.save("chart3.json")
 
