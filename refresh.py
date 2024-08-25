@@ -37,7 +37,8 @@ loan_status_distribution.properties(width='container')
 
 
 # If earlier charts are defined, combine all charts into a dashboard
-dashboard = chart1 | loan_status_distribution 
+#dashboard = chart1 | loan_status_distribution 
+dashboard = alt.hconcat(chart1, loan_status_distribution , spacing=50)  # Adjust spacing as needed
 
 # Display or save the dashboard
 dashboard.save("chart1.json")
@@ -129,14 +130,14 @@ line_plot_installment = alt.Chart(df).mark_line(point=True).encode(
     tooltip=[alt.Tooltip('rounded_installment:Q', title='Installment'), 'mean(dti):Q', 'loan_status:N']
 ).properties(
     title="Average DTI vs Installment by Loan Status",
-    width=200
-)
+    width=600,
+    height=400)
 
 line_plot_installment.properties(width='container')
 
 
 # Combine all three charts horizontally
-combined_chart = alt.hconcat(bar_chart, line_plot_income, line_plot_installment, spacing=30)  # Adjust spacing as needed
+combined_chart = alt.hconcat(bar_chart, line_plot_income, line_plot_installment, spacing=50)  # Adjust spacing as needed
 
 # Display the combined chart
 combined_chart.save("chart3.json")
