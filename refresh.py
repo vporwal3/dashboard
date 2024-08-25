@@ -99,7 +99,8 @@ bar_chart = alt.Chart(df).mark_bar().encode(
     tooltip=['mean(dti)', 'loan_status']
 ).properties(
     title="Average DTI by Loan Status",
-    width=200
+    width=600,
+    height=400
 )
 
 bar_chart.properties(width='container')
@@ -113,8 +114,8 @@ line_plot_income = alt.Chart(df).mark_line(point=True).encode(
     tooltip=[alt.Tooltip('rounded_annual_inc:Q', title='Annual Income'), 'mean(dti):Q', 'loan_status:N']
 ).properties(
     title="Average DTI vs Annual Income by Loan Status",
-    width=200
-)
+    width=600,
+    height=400)
 line_plot_income.properties(width='container')
 
 
